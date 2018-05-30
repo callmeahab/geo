@@ -28,12 +28,24 @@ defmodule Geo.Utils do
 
     case bit_size(hex) do
       64 ->
-        <<value::float-32>> = <<String.to_integer(hex, 16)::integer-32>>
-        value
+        try do
+          <<value::float-32>> = <<String.to_integer(hex, 16)::integer-32>>
+          value
+        rescue
+          _ ->
+            <<value::integer-32>> = <<String.to_integer(hex, 16)::integer-32>>
+            value
+        end
 
       128 ->
-        <<value::float-64>> = <<String.to_integer(hex, 16)::integer-64>>
-        value
+        try do
+          <<value::float-64>> = <<String.to_integer(hex, 16)::integer-64>>
+          value
+        rescue
+          _ ->
+            <<value::integer-64>> = <<String.to_integer(hex, 16)::integer-64>>
+            value
+        end
     end
   end
 
